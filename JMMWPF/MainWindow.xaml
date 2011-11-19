@@ -1,0 +1,18 @@
+﻿<Window x:Class="UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Jetset Minecraft Manager" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="180"/>
+            <RowDefinition />
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <ComboBox Width="200" Height="40" Grid.Row="0" Name="Profiles" FontSize="22" ItemsSource="{Binding Path=Profiles}" SelectedItem="{Binding Path=Profiles[0]}">
+        </ComboBox>
+        <Button Width="100" Height="60" Grid.Row="1" Background="{Binding Path=ColorName}">
+            Load Profile
+        </Button>
+    </Grid>
+    
+</Window>
