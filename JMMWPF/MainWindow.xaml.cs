@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Core;
 
 namespace UI
 {
@@ -23,6 +24,11 @@ namespace UI
         {
             this.DataContext = new MainWindowViewModel();
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).LoadProfile();
         }
     }
 }

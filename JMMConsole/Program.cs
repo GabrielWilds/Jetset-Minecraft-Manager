@@ -25,7 +25,7 @@ namespace Console
             bool loop = true;
             while (loop)
             {
-                Core.MCProfile[] profiles = FileMan.GetProfiles(profileDirectory);
+                MCProfile[] profiles = FileMan.GetProfiles(profileDirectory);
 
                 SysConsole.WriteLine("Minecraft Profile Loader");
                 SysConsole.WriteLine("==========");

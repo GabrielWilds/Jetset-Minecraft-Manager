@@ -8,11 +8,12 @@
             <RowDefinition />
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <ComboBox Width="200" Height="40" Grid.Row="0" Name="Profiles" FontSize="22" ItemsSource="{Binding Path=Profiles}" SelectedItem="{Binding Path=Profiles[0]}">
+        <ComboBox Width="200" Height="40" DisplayMemberPath="Name" Grid.Row="0" FontSize="22" ItemsSource="{Binding Path=Profiles}" SelectedItem="{Binding Path=SelectedProfile}">
         </ComboBox>
-        <Button Width="100" Height="60" Grid.Row="1" Background="{Binding Path=ColorName}">
+        <Button Width="100" Height="40" Grid.Row="1" Background="{Binding Path=ColorName}" Click="Button_Click">
             Load Profile
         </Button>
+        <ListBox Grid.Row="2" Height="100" HorizontalAlignment="Left" Margin="91,70,0,0" Name="listBox1" VerticalAlignment="Top" Width="120" />
     </Grid>
     
 </Window>

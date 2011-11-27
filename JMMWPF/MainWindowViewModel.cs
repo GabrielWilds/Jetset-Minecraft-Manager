@@ -11,18 +11,24 @@ namespace UI
     class MainWindowViewModel
     {
         string _curDirectory = "";
-        string[] _profileNames;
         SolidColorBrush _brushColor = new SolidColorBrush();
         Core.MCProfile[] _profiles;
+        MCProfile _selectedProfile;
 
         public SolidColorBrush ColorName
         {
             get { return _brushColor; }
         }
 
-        public string[] Profiles
+        public MCProfile[] Profiles
         {
-            get { return _profileNames; }
+            get { return _profiles; }
+        }
+
+        public MCProfile SelectedProfile
+        {
+            get { return _selectedProfile; }
+            set { _selectedProfile = value; }
         }
 
         public MainWindowViewModel()
@@ -31,8 +37,12 @@ namespace UI
             //_curDirectory = Directory.GetCurrentDirectory();
             _curDirectory = "C:\\Games\\Minecraft";
             _profiles = FileMan.GetProfiles(Path.Combine(_curDirectory, "profiles"));
-            _profileNames = FileMan.GetProfileNames(_profiles);
-            //_profileNames = new string[]{"Profile 1", "Profile 2"};
+            _selectedProfile = _profiles[0];
+        }
+
+        public void LoadProfile()
+        {
+            ProcessMan.LaunchGame(SelectedProfile, _curDirectory);
         }
 
         
