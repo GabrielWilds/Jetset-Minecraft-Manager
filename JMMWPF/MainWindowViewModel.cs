@@ -38,7 +38,7 @@ namespace UI
             set
             {
                 _selectedProfile = value;
-                RaisePropertyChanged("SelectedProfiles");
+                RaisePropertyChanged("SelectedProfile");
             }
         }
 
@@ -91,8 +91,8 @@ namespace UI
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null) 
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }
