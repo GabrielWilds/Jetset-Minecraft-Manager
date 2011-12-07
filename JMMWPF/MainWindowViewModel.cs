@@ -73,7 +73,7 @@ namespace UI
 
         public void NewProfile()
         {
-            Window newProfileWindow = new NewProfileWindow();
+            Window newProfileWindow = new NewProfileWindow("New Profile", "Profile name:", "Create", "New");
             newProfileWindow.ShowDialog();
             LoadProfiles();
         }
