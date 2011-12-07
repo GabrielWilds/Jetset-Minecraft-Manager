@@ -5,10 +5,12 @@ using System.Text;
 using System.Windows.Media;
 using System.IO;
 using Core;
+using System.Windows;
+using System.ComponentModel;
 
 namespace UI
 {
-    class MainWindowViewModel
+    class MainWindowViewModel : INotifyPropertyChanged
     {
         string _curDirectory = "";
         SolidColorBrush _brushColor = new SolidColorBrush();
@@ -23,12 +25,21 @@ namespace UI
         public MCProfile[] Profiles
         {
             get { return _profiles; }
+            set
+            {
+                _profiles = value;
+                RaisePropertyChanged("Profiles");
+            }
         }
 
         public MCProfile SelectedProfile
         {
             get { return _selectedProfile; }
-            set { _selectedProfile = value; }
+            set
+            {
+                _selectedProfile = value;
+                RaisePropertyChanged("SelectedProfiles");
+            }
         }
 
         public MainWindowViewModel()
@@ -36,8 +47,13 @@ namespace UI
             _brushColor.Color = Colors.LightCoral;
             //_curDirectory = Directory.GetCurrentDirectory();
             _curDirectory = "C:\\Games\\Minecraft";
-            _profiles = FileMan.GetProfiles(Path.Combine(_curDirectory, "profiles"));
-            _selectedProfile = _profiles[0];
+            LoadProfiles();
+        }
+
+        public void LoadProfiles()
+        {
+            Profiles = FileMan.GetProfiles(Path.Combine(_curDirectory, "profiles"));
+            SelectedProfile = Profiles[0];
         }
 
         public void LoadProfile()
@@ -45,7 +61,39 @@ namespace UI
             ProcessMan.LaunchGame(SelectedProfile, _curDirectory);
         }
 
-        
+        public void CopyProfile()
+        {
+            MessageBox.Show("Function not yet ready!", "Error", MessageBoxButton.OK);
+        }
+
+        public void RenameProfile()
+        {
+            MessageBox.Show("Function not yet ready!", "Error", MessageBoxButton.OK);
+        }
+
+        public void NewProfile()
+        {
+            Window newProfileWindow = new NewProfileWindow();
+            newProfileWindow.ShowDialog();
+            LoadProfiles();
+        }
+
+        public void DeleteProfile()
+        {
+            MessageBoxResult results = MessageBox.Show("Are you sure you want to delete the profile \"" + SelectedProfile.Name + "\"?", "", MessageBoxButton.YesNo);
+            if (results == MessageBoxResult.Yes)
+            {
+                FileMan.DeleteProfile(SelectedProfile);
+                LoadProfiles();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 }

@@ -38,7 +38,7 @@ namespace Core
         {
             System.Diagnostics.Process bat = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo batinfo = new System.Diagnostics.ProcessStartInfo(curDirectory + "\\localApp.bat");
-            batinfo.CreateNoWindow = false;
+            batinfo.CreateNoWindow = true;
             batinfo.UseShellExecute = false;
             batinfo.Arguments = args;
             bat.StartInfo = batinfo;

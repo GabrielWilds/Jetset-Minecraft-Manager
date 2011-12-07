@@ -53,6 +53,18 @@ namespace Core
             return profileNames;
         }
 
+        public static bool CheckForExistingProfile(string name, string profileDirectory)
+        {
+            string[] profileNames = GetProfileNames(GetProfiles(profileDirectory));
+            bool foundProfile = false;
+            for (int i = 0; i < profileNames.Length; i++)
+            {
+                if (profileNames[i] == name)
+                    foundProfile = true;
+            }
+            return foundProfile;
+        }
+
         public static void CopyProfile(Core.MCProfile profile, string profileDirectory)
         {
             Console.WriteLine("Enter the name you want for the new copy of the profile:");
@@ -91,6 +103,15 @@ namespace Core
             }
         }
 
+        public static void CreateNewProfile(string name, string profileDirectory)
+        {
+            string newProfile = profileDirectory + "\\" + ReplaceForbiddenChars(name);
+            Directory.CreateDirectory(newProfile);
+            File.WriteAllText(newProfile + "\\profileinfo.txt", name);
+            Directory.CreateDirectory(newProfile + "\\.minecraft");
+            File.Copy(GetProfiles(profileDirectory)[0].Path + "\\.minecraft\\lastlogin", newProfile + "\\.minecraft\\lastlogin");
+        }
+
         public static void RenameProfile(Core.MCProfile[] profiles, int selection)
         {
             Console.WriteLine("The profile's current name is " + profiles[selection].Name + ". What would you like the new name to be?");
@@ -98,11 +119,9 @@ namespace Core
             File.WriteAllText(profiles[selection].Path + "\\profileinfo.txt", newName);
         }
 
-        public static void DeleteProfile(Core.MCProfile[] profiles, int selection)
+        public static void DeleteProfile(Core.MCProfile profile)
         {
-            Console.WriteLine("Are you sure you want to delete the " + profiles[selection].Name + " profile?");
-            if (Input.GetUserYesNo())
-                Directory.Delete(profiles[selection].Path, true);
+                Directory.Delete(profile.Path, true);
         }
 
         public static string ReplaceForbiddenChars(string input)

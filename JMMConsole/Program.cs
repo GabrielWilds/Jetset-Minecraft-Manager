@@ -94,7 +94,7 @@ namespace Console
                             FileMan.CopyProfile(profiles[selection], profileDirectory);
                             break;
                         case 5:
-                            FileMan.DeleteProfile(profiles, selection);
+                            FileMan.DeleteProfile(profiles[selection]);
                             break;
                         default:
                             break;

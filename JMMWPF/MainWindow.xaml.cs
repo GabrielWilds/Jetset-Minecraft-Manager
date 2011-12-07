@@ -26,9 +26,29 @@ namespace UI
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Load(object sender, RoutedEventArgs e)
         {
             ((MainWindowViewModel)this.DataContext).LoadProfile();
+        }
+
+        private void Copy(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).CopyProfile();
+        }
+
+        private void Rename(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).RenameProfile();
+        }
+
+        private void New(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).NewProfile();
+        }
+
+        private void Delete(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).DeleteProfile();
         }
     }
 }
