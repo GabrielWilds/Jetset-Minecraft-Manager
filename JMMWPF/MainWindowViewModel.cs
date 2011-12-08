@@ -63,17 +63,21 @@ namespace UI
 
         public void CopyProfile()
         {
-            MessageBox.Show("Function not yet ready!", "Error", MessageBoxButton.OK);
+            Window newProfileWindow = new NewProfileWindow("Copy Profile", "New profile name:", "Copy", "Copy", SelectedProfile);
+            newProfileWindow.ShowDialog();
+            LoadProfiles();
         }
 
         public void RenameProfile()
         {
-            MessageBox.Show("Function not yet ready!", "Error", MessageBoxButton.OK);
+            Window newProfileWindow = new NewProfileWindow("Rename Profile", "New profile name:", "Rename", "Rename", SelectedProfile);
+            newProfileWindow.ShowDialog();
+            LoadProfiles();
         }
 
         public void NewProfile()
         {
-            Window newProfileWindow = new NewProfileWindow("New Profile", "Profile name:", "Create", "New");
+            Window newProfileWindow = new NewProfileWindow("New Profile", "Profile name:", "Create", "New", SelectedProfile);
             newProfileWindow.ShowDialog();
             LoadProfiles();
         }

@@ -19,9 +19,9 @@ namespace UI
     public partial class NewProfileWindow : Window
     {
 
-        public NewProfileWindow(string _title, string _prompt, string _buttonTitle, string _action)
+        public NewProfileWindow(string _title, string _prompt, string _buttonTitle, string _action, Core.MCProfile _profile)
         {
-            this.DataContext = new NewProfileWindowViewModel(this, _action);
+            this.DataContext = new NewProfileWindowViewModel(this, _action, _profile);
             InitializeComponent();
             Title = _title;
             Prompt.Text = _prompt;

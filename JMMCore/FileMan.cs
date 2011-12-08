@@ -53,32 +53,40 @@ namespace Core
             return profileNames;
         }
 
-        public static bool CheckForExistingProfile(string name, string profileDirectory)
+        public static bool CheckForExistingProfile(MCProfile profile, string profileDirectory)
         {
-            string[] profileNames = GetProfileNames(GetProfiles(profileDirectory));
+            MCProfile[] profiles = GetProfiles(profileDirectory);
             bool foundProfile = false;
-            for (int i = 0; i < profileNames.Length; i++)
+            for (int i = 0; i < profiles.Length; i++)
             {
-                if (profileNames[i] == name)
+                if (profiles[i] == profile)
                     foundProfile = true;
             }
             return foundProfile;
         }
 
-        public static void CopyProfile(Core.MCProfile profile, string profileDirectory)
+        public static bool CheckForExistingProfile(string profileName, string profileDirectory)
         {
-            Console.WriteLine("Enter the name you want for the new copy of the profile:");
-            string profileName = Console.ReadLine();
-            string folderName = ReplaceForbiddenChars(profileName);
+            MCProfile[] profiles = GetProfiles(profileDirectory);
+            bool foundProfile = false;
+            for (int i = 0; i < profiles.Length; i++)
+            {
+                if (profiles[i].Name == profileName)
+                    foundProfile = true;
+            }
+            return foundProfile;
+        }
+
+        public static void CopyProfile(Core.MCProfile profile, string profileDirectory, string newName)
+        {
+            string folderName = ReplaceForbiddenChars(newName);
             string newProfile = DiskPath.Combine(profileDirectory + "\\" + folderName);
 
             if (!Directory.Exists(newProfile))
                 Directory.CreateDirectory(newProfile);
             if (!File.Exists(newProfile + "\\profileinfo.txt"))
-                File.WriteAllText(newProfile + "\\profileinfo.txt", profileName);
+                File.WriteAllText(newProfile + "\\profileinfo.txt", newName);
 
-            Console.Clear();
-            Console.WriteLine("Working...");
             CopyFolder(profile.Path, newProfile);
         }
 
@@ -112,16 +120,14 @@ namespace Core
             File.Copy(GetProfiles(profileDirectory)[0].Path + "\\.minecraft\\lastlogin", newProfile + "\\.minecraft\\lastlogin");
         }
 
-        public static void RenameProfile(Core.MCProfile[] profiles, int selection)
+        public static void RenameProfile(Core.MCProfile profile, string newName)
         {
-            Console.WriteLine("The profile's current name is " + profiles[selection].Name + ". What would you like the new name to be?");
-            string newName = Console.ReadLine();
-            File.WriteAllText(profiles[selection].Path + "\\profileinfo.txt", newName);
+            File.WriteAllText(profile.Path + "\\profileinfo.txt", newName);
         }
 
         public static void DeleteProfile(Core.MCProfile profile)
         {
-                Directory.Delete(profile.Path, true);
+            Directory.Delete(profile.Path, true);
         }
 
         public static string ReplaceForbiddenChars(string input)

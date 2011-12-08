@@ -9,13 +9,16 @@ namespace UI
 {
     class NewProfileWindowViewModel
     {
-        public NewProfileWindowViewModel(Window window, string _action)
+        public NewProfileWindowViewModel(Window window, string _action, MCProfile selectedProfile)
         {
             _window = window;
             Action = _action;
+            Profile = selectedProfile;
         }
 
+        string _profileDirectory = "C:\\Games\\Minecraft\\profiles";
         Window _window;
+
         public string NewProfileName
         {
             get;
@@ -23,6 +26,12 @@ namespace UI
         }
 
         public string Action
+        {
+            get;
+            set;
+        }
+
+        public MCProfile Profile
         {
             get;
             set;
@@ -48,23 +57,39 @@ namespace UI
 
         public void CreateProfile()
         {
-            string profileDirectory = "C:\\Games\\Minecraft\\profiles";
-            if (!FileMan.CheckForExistingProfile(NewProfileName, profileDirectory))
+            if (!FileMan.CheckForExistingProfile(NewProfileName, _profileDirectory))
             {
-                FileMan.CreateNewProfile(NewProfileName, profileDirectory);
+                FileMan.CreateNewProfile(NewProfileName, _profileDirectory);
                 MessageBox.Show("New Profile " + NewProfileName + " was successfully created!");
                 _window.Close();
             }
             else
-                MessageBox.Show("This Profile Already Exists! Enter a different profile name.", "Error", MessageBoxButton.OK);
+                MessageBox.Show("This profile already exists! Enter a different profile name.", "Error", MessageBoxButton.OK);
         }
 
         public void CopyProfile()
         {
+            if (!FileMan.CheckForExistingProfile(Profile, _profileDirectory))
+            {
+                FileMan.CopyProfile(Profile, _profileDirectory, NewProfileName);
+                MessageBox.Show(Profile.Name + " was successfully copied to " + NewProfileName);
+                _window.Close();
+            }
+            else
+                MessageBox.Show("This new profile name already exists! Enter a different profile name.", "Error", MessageBoxButton.OK);
         }
 
         public void RenameProfile()
         {
+            if (!FileMan.CheckForExistingProfile(Profile, _profileDirectory))
+            {
+                FileMan.RenameProfile(Profile, NewProfileName);
+                MessageBox.Show(Profile.Name + " was successfully renamed to " + NewProfileName);
+                _window.Close();
+            }
+            else
+                MessageBox.Show("The entered name is already taken by an existing profile! Enter a different profile name.", "Error", MessageBoxButton.OK);
+
         }
     }
 }
