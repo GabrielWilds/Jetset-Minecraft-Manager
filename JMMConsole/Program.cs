@@ -88,10 +88,14 @@ namespace Console
                                 SysConsole.WriteLine("Cartograph not found. Please place Cartograph in the same folder as Multi Minecraft Manager");                           
                             break;
                         case 3:
-                            FileMan.RenameProfile(profiles[selection], "default name");
+                            SysConsole.WriteLine("Enter new name:");
+                            string rename = SysConsole.ReadLine();
+                            FileMan.RenameProfile(profiles[selection], rename);
                             break;
                         case 4:
-                            FileMan.CopyProfile(profiles[selection], profileDirectory, "default name");
+                            SysConsole.WriteLine("Enter new name:");
+                            string copyName = SysConsole.ReadLine();
+                            FileMan.CopyProfile(profiles[selection], profileDirectory, copyName);
                             break;
                         case 5:
                             FileMan.DeleteProfile(profiles[selection]);

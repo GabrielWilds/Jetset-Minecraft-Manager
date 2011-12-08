@@ -16,7 +16,9 @@ namespace UI
             Profile = selectedProfile;
         }
 
-        string _profileDirectory = "C:\\Games\\Minecraft\\profiles";
+        //string _profileDirectory = "C:\\Games\\Minecraft\\profiles";
+
+        string _profileDirectory = App.CurDirectory + "\\profiles";
         Window _window;
 
         public string NewProfileName
@@ -58,7 +60,7 @@ namespace UI
         public void CreateProfile()
         {
             if (!FileMan.CheckForExistingProfile(NewProfileName, _profileDirectory))
-            {
+             {
                 FileMan.CreateNewProfile(NewProfileName, _profileDirectory);
                 MessageBox.Show("New Profile " + NewProfileName + " was successfully created!");
                 _window.Close();
@@ -71,9 +73,9 @@ namespace UI
         {
             if (!FileMan.CheckForExistingProfile(Profile, _profileDirectory))
             {
-                FileMan.CopyProfile(Profile, _profileDirectory, NewProfileName);
-                MessageBox.Show(Profile.Name + " was successfully copied to " + NewProfileName);
-                _window.Close();
+               FileMan.CopyProfile(Profile, _profileDirectory, NewProfileName);
+               MessageBox.Show(Profile.Name + " was successfully copied to " + NewProfileName);
+               _window.Close();
             }
             else
                 MessageBox.Show("This new profile name already exists! Enter a different profile name.", "Error", MessageBoxButton.OK);

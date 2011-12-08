@@ -12,7 +12,6 @@ namespace UI
 {
     class MainWindowViewModel : INotifyPropertyChanged
     {
-        string _curDirectory = "";
         SolidColorBrush _brushColor = new SolidColorBrush();
         Core.MCProfile[] _profiles;
         MCProfile _selectedProfile;
@@ -45,32 +44,30 @@ namespace UI
         public MainWindowViewModel()
         {
             _brushColor.Color = Colors.LightCoral;
-            //_curDirectory = Directory.GetCurrentDirectory();
-            _curDirectory = "C:\\Games\\Minecraft";
             LoadProfiles();
         }
 
         public void LoadProfiles()
         {
-            Profiles = FileMan.GetProfiles(Path.Combine(_curDirectory, "profiles"));
+            Profiles = FileMan.GetProfiles(Path.Combine(App.CurDirectory, "profiles"));
             SelectedProfile = Profiles[0];
         }
 
         public void LoadProfile()
         {
-            ProcessMan.LaunchGame(SelectedProfile, _curDirectory);
+            ProcessMan.LaunchGame(SelectedProfile, App.CurDirectory);
         }
 
         public void CopyProfile()
         {
-            Window newProfileWindow = new NewProfileWindow("Copy Profile", "New profile name:", "Copy", "Copy", SelectedProfile);
+            Window newProfileWindow = new NewProfileWindow("Copy Profile", "Copy name:", "Copy", "Copy", SelectedProfile);
             newProfileWindow.ShowDialog();
             LoadProfiles();
         }
 
         public void RenameProfile()
         {
-            Window newProfileWindow = new NewProfileWindow("Rename Profile", "New profile name:", "Rename", "Rename", SelectedProfile);
+            Window newProfileWindow = new NewProfileWindow("Rename Profile", "New name:", "Rename", "Rename", SelectedProfile);
             newProfileWindow.ShowDialog();
             LoadProfiles();
         }
