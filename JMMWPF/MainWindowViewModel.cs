@@ -44,12 +44,12 @@ namespace UI
         public MainWindowViewModel()
         {
             _brushColor.Color = Colors.LightCoral;
-            LoadProfiles();
+            GetProfiles();
         }
 
-        public void LoadProfiles()
+        public void GetProfiles()
         {
-            Profiles = FileMan.GetProfiles(Path.Combine(App.CurDirectory, "profiles"));
+            Profiles = FileMan.GetProfiles(App.CurDirectory + "\\profiles");
             SelectedProfile = Profiles[0];
         }
 
@@ -62,21 +62,21 @@ namespace UI
         {
             Window newProfileWindow = new NewProfileWindow("Copy Profile", "Copy name:", "Copy", "Copy", SelectedProfile);
             newProfileWindow.ShowDialog();
-            LoadProfiles();
+            GetProfiles();
         }
 
         public void RenameProfile()
         {
             Window newProfileWindow = new NewProfileWindow("Rename Profile", "New name:", "Rename", "Rename", SelectedProfile);
             newProfileWindow.ShowDialog();
-            LoadProfiles();
+            GetProfiles();
         }
 
         public void NewProfile()
         {
             Window newProfileWindow = new NewProfileWindow("New Profile", "Profile name:", "Create", "New", SelectedProfile);
             newProfileWindow.ShowDialog();
-            LoadProfiles();
+            GetProfiles();
         }
 
         public void DeleteProfile()
@@ -85,7 +85,7 @@ namespace UI
             if (results == MessageBoxResult.Yes)
             {
                 FileMan.DeleteProfile(SelectedProfile);
-                LoadProfiles();
+                GetProfiles();
             }
         }
 

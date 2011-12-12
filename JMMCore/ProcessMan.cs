@@ -43,6 +43,7 @@ namespace Core
             batinfo.Arguments = args;
             bat.StartInfo = batinfo;
             bat.Start();
+            
         }
 
         public static string AddQuotes(string input)

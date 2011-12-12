@@ -16,14 +16,16 @@ namespace UI
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            CurDirectory = Directory.GetCurrentDirectory();
         }
 
         public static string CurDirectory
         {
             
-            get;
-            private set;
+            get
+            {
+                //return "C:\\Games\\Minecraft";
+                return Directory.GetCurrentDirectory();
+            }
         }
     }
 }
