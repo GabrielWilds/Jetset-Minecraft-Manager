@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Core;
+using System.IO;
 
 namespace UI
 {
@@ -22,6 +23,11 @@ namespace UI
     {
         public MainWindow()
         {
+#if DEBUG
+            App.CurrentDirectory = "C:\\Games\\Minecraft";
+#else
+            App.CurrentDirectory = Directory.GetCurrentDirectory();
+#endif
             this.DataContext = new MainWindowViewModel();
             InitializeComponent();
         }

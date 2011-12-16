@@ -9,14 +9,16 @@ namespace Core
 {
     public class ProcessMan
     {
+        private static string[] _batchText = { "@echo off", "setlocal", "set APPDATA=%~1", "\"%~2\" %~3 \"%~4\"" };
         public static void LaunchGame(Core.MCProfile profile, string curDirectory)
         {
             string[] arg = new string[4];
             arg[0] = AddQuotes(profile.Path);
             arg[1] = AddQuotes(FileMan.GetJavaInstallationPath() + "\\bin\\javaw.exe");
-            arg[2] = AddQuotes("-Xmx2048M -Xms2048M -jar " + curDirectory + "\\minecraft.exe");
+            arg[2] = AddQuotes("-Xmx2048M -Xms2048M -jar");
+            arg[3] = AddQuotes(curDirectory + "\\minecraft.exe");
             string batString = AddQuotes(curDirectory + "\\mineBat.bat");
-            string arguments = arg[0] + " " + arg[1] + " " + arg[2];
+            string arguments = arg[0] + " " + arg[1] + " " + arg[2] + " " + arg[3];
             LaunchProcess(arguments, "\\minecraft.exe", curDirectory);
         }
 
@@ -28,15 +30,17 @@ namespace Core
             string[] arg = new string[3];
             arg[0] = AddQuotes(profile.Path);
             arg[1] = AddQuotes(profile.Path + "\\.minecraft" + "\\Cartograph_G_Renderer.exe");
-            arg[2] = " ";
             string batString = AddQuotes(curDirectory + "\\mineBat.bat");
-            string arguments = arg[0] + " " + arg[1] + " " + arg[2];
+            string arguments = arg[0] + " " + arg[1];
             LaunchProcess(arguments, "\\Cartograph_G.exe", curDirectory);
         }
 
         public static void LaunchProcess(string args, string proc, string curDirectory)
         {
             System.Diagnostics.Process bat = new System.Diagnostics.Process();
+            if(!File.Exists(curDirectory + "\\localApp.bat"))
+                File.WriteAllLines(curDirectory + "\\localApp.bat", _batchText);
+
             System.Diagnostics.ProcessStartInfo batinfo = new System.Diagnostics.ProcessStartInfo(curDirectory + "\\localApp.bat");
             batinfo.CreateNoWindow = true;
             batinfo.UseShellExecute = false;

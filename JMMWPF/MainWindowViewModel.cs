@@ -44,18 +44,28 @@ namespace UI
         public MainWindowViewModel()
         {
             _brushColor.Color = Colors.LightCoral;
+            EnsureNeededFolders();
             GetProfiles();
         }
 
         public void GetProfiles()
         {
-            Profiles = FileMan.GetProfiles(App.CurDirectory + "\\profiles");
+            Profiles = FileMan.GetProfiles(App.CurrentDirectory + "\\profiles");
             SelectedProfile = Profiles[0];
         }
 
         public void LoadProfile()
         {
-            ProcessMan.LaunchGame(SelectedProfile, App.CurDirectory);
+            if (File.Exists(App.CurrentDirectory + "\\minecraft.exe"))
+            {
+                ProcessMan.LaunchGame(SelectedProfile, App.CurrentDirectory);
+                MessageBox.Show(SelectedProfile.Name + " loaded, closing Jetset Minecraft Manager");
+                Environment.Exit(0);
+            }
+            else
+                MessageBox.Show("Place minecraft.exe (the launcher) in the same folder as this application! It's needed to actually launch the game!", "ERROR");
+
+
         }
 
         public void CopyProfile()
@@ -89,10 +99,44 @@ namespace UI
             }
         }
 
+        public void EnsureNeededFolders()
+        {
+            string profiles = App.CurrentDirectory + "\\profiles";
+            if (!Directory.Exists(profiles))
+            {
+                MessageBox.Show("No \"profiles\" folder found! Creating one now!", "missing profiles folder");
+                Directory.CreateDirectory(profiles);
+                CreateDefaultProfile();
+            }
+            if (!Directory.EnumerateFileSystemEntries(profiles).Any())
+            {
+                CreateDefaultProfile();
+            }
+        }
+
+        public void CreateDefaultProfile()
+        {
+            MCProfile importProfile = new MCProfile(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\.minecraft", "default");
+            string defaultInstall = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\.minecraft";
+            
+            if (Directory.Exists(defaultInstall))
+            {
+                MessageBox.Show("Importing your existing Minecraft install to the Jetset Minecraft Manager folder. Enter a name for this profile at the prompt.");
+                Window newProfileWindow = new NewProfileWindow("Name Profile", "Profile name:", "Import", "Default", importProfile);
+                newProfileWindow.ShowDialog();
+                
+            }
+            else
+            {
+                MessageBox.Show("No existing Minecraft install found! Go to http:\\www.minecraft.net and buy and/or install Minecraft!", "Why did you even download this app?");
+                Environment.Exit(0);
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null) 
+            if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 

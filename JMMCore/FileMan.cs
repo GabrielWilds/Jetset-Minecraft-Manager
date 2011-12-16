@@ -13,35 +13,40 @@ namespace Core
         public static Core.MCProfile[] GetProfiles(string profileDirectory)
         {
             string[] folders = Directory.GetDirectories(profileDirectory);
-            List<string> profilePaths = new List<string>();
-            foreach (string folder in folders)
+            if (folders.Length == 0)
+                return null;
+            else
             {
-                if (Directory.Exists(folder + "\\.minecraft"))
-                    profilePaths.Add(folder);
-            }
-
-            Core.MCProfile[] profiles = new Core.MCProfile[profilePaths.Count];
-            for (int i = 0; i < profiles.Length; i++)
-            {
-                string profileName = "";
-                if (File.Exists(profilePaths[i] + "\\profileinfo.txt"))
+                List<string> profilePaths = new List<string>();
+                foreach (string folder in folders)
                 {
-                    string[] profileInfo = File.ReadAllLines(profilePaths[i] + "\\profileinfo.txt");
-                    profileName = profileInfo[0];
-                }
-                else
-                {
-                    Console.WriteLine("Found a seemingly valid profile without a set profile name. The folder name is " + profilePaths[i].Remove(0, profileDirectory.Length + 1) + ".");
-                    Console.WriteLine("Please enter a name for the profile. If you'd like to use the folder name for the profile name, just press [enter].");
-                    profileName = Console.ReadLine();
+                    if (Directory.Exists(folder + "\\.minecraft"))
+                        profilePaths.Add(folder);
                 }
 
-                if (profileName == "")
-                    profileName = profilePaths[i].Remove(0, profileDirectory.Length + 1);
+                Core.MCProfile[] profiles = new Core.MCProfile[profilePaths.Count];
+                for (int i = 0; i < profiles.Length; i++)
+                {
+                    string profileName = "";
+                    if (File.Exists(profilePaths[i] + "\\profileinfo.txt"))
+                    {
+                        string[] profileInfo = File.ReadAllLines(profilePaths[i] + "\\profileinfo.txt");
+                        profileName = profileInfo[0];
+                    }
+                    else
+                    {
+                        Console.WriteLine("Found a seemingly valid profile without a set profile name. The folder name is " + profilePaths[i].Remove(0, profileDirectory.Length + 1) + ".");
+                        Console.WriteLine("Please enter a name for the profile. If you'd like to use the folder name for the profile name, just press [enter].");
+                        profileName = Console.ReadLine();
+                    }
 
-                profiles[i] = new MCProfile(profilePaths[i], profileName);
+                    if (profileName == "")
+                        profileName = profilePaths[i].Remove(0, profileDirectory.Length + 1);
+
+                    profiles[i] = new MCProfile(profilePaths[i], profileName);
+                }
+                return profiles;
             }
-            return profiles;
         }
 
         public static string[] GetProfileNames(Core.MCProfile[] profiles)
@@ -111,13 +116,15 @@ namespace Core
             }
         }
 
-        public static void CreateNewProfile(string name, string profileDirectory)
+        public static void CreateNewProfile(string name, string profileDirectory, MCProfile loginSourceProfile)
         {
             string newProfile = profileDirectory + "\\" + ReplaceForbiddenChars(name);
             Directory.CreateDirectory(newProfile);
             File.WriteAllText(newProfile + "\\profileinfo.txt", name);
             Directory.CreateDirectory(newProfile + "\\.minecraft");
-            File.Copy(GetProfiles(profileDirectory)[0].Path + "\\.minecraft\\lastlogin", newProfile + "\\.minecraft\\lastlogin");
+            string loginPath = loginSourceProfile.Path + "\\.minecraft\\lastlogin";
+            if (File.Exists(loginPath))
+                File.Copy(loginPath, newProfile + "\\.minecraft\\lastlogin");
         }
 
         public static void RenameProfile(Core.MCProfile profile, string newName)
@@ -135,12 +142,13 @@ namespace Core
             input = input.Replace('\\', '-');
             input = input.Replace('/', '-');
             input = input.Replace(':', ';');
-            input = input.Replace('*', '^');
+            input = input.Replace('*', ',');
             input = input.Replace('?', '.');
             input = input.Replace('\"', '\'');
             input = input.Replace('<', '-');
             input = input.Replace('>', '-');
             input = input.Replace('|', '-');
+            input = input.Replace('\"', '\'');
             return input;
         }
 

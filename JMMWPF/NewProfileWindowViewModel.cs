@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Core;
 using System.Windows;
+using System.IO;
 
 namespace UI
 {
@@ -18,7 +19,7 @@ namespace UI
 
         //string _profileDirectory = "C:\\Games\\Minecraft\\profiles";
 
-        string _profileDirectory = App.CurDirectory + "\\profiles";
+        string _profileDirectory = App.CurrentDirectory + "\\profiles";
         Window _window;
 
         public string NewProfileName
@@ -52,6 +53,9 @@ namespace UI
                 case "Rename":
                     RenameProfile();
                     break;
+                case "Default":
+                    CopyDefaultProfile();
+                    break;
                 default:
                     break;
             }
@@ -61,7 +65,7 @@ namespace UI
         {
             if (!FileMan.CheckForExistingProfile(NewProfileName, _profileDirectory))
              {
-                FileMan.CreateNewProfile(NewProfileName, _profileDirectory);
+                FileMan.CreateNewProfile(NewProfileName, _profileDirectory, Profile);
                 MessageBox.Show("New Profile " + NewProfileName + " was successfully created!");
                 _window.Close();
             }
@@ -92,6 +96,17 @@ namespace UI
             else
                 MessageBox.Show("The entered name is already taken by an existing profile! Enter a different profile name.", "Error", MessageBoxButton.OK);
 
+        }
+
+        public void CopyDefaultProfile()
+        {
+            string folderName = FileMan.ReplaceForbiddenChars(NewProfileName);
+            Directory.CreateDirectory(App.CurrentDirectory + "\\profiles\\" + folderName);
+            Directory.CreateDirectory(App.CurrentDirectory + "\\profiles\\" + folderName + "\\.minecraft");
+            MessageBox.Show("Importing your existing Minecraft install. This may take a moment.");
+            File.WriteAllText(App.CurrentDirectory + "\\profiles\\" + folderName + "\\profileinfo.txt", NewProfileName);
+            FileMan.CopyFolder(Profile.Path, App.CurrentDirectory + "\\profiles\\" + folderName + "\\.minecraft");
+            _window.Close();
         }
     }
 }

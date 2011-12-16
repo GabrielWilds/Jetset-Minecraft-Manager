@@ -15,17 +15,14 @@ namespace UI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            base.OnStartup(e);   
         }
 
-        public static string CurDirectory
+        public static string CurrentDirectory
         {
-            
-            get
-            {
-                //return "C:\\Games\\Minecraft";
-                return Directory.GetCurrentDirectory();
-            }
+
+            get;
+            set;
         }
     }
 }
