@@ -99,6 +99,11 @@ namespace UI
             }
         }
 
+        public void OpenProfileFolder()
+        {
+            ProcessMan.OpenProfileFolder(SelectedProfile);
+        }
+
         public void EnsureNeededFolders()
         {
             string profiles = App.CurrentDirectory + "\\profiles";

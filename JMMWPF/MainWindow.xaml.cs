@@ -56,5 +56,10 @@ namespace UI
         {
             ((MainWindowViewModel)this.DataContext).DeleteProfile();
         }
+
+        private void Open(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)this.DataContext).OpenProfileFolder();
+        }
     }
 }

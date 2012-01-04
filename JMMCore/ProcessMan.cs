@@ -10,12 +10,22 @@ namespace Core
     public class ProcessMan
     {
         private static string[] _batchText = { "@echo off", "setlocal", "set APPDATA=%~1", "\"%~2\" %~3 \"%~4\"" };
+
+        public static void OpenProfileFolder(Core.MCProfile profile)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo explorer = new System.Diagnostics.ProcessStartInfo("explorer.exe");
+            explorer.Arguments = profile.Path + "\\.minecraft";
+            process.StartInfo = explorer;
+            process.Start();
+        }
+
         public static void LaunchGame(Core.MCProfile profile, string curDirectory)
         {
             string[] arg = new string[4];
             arg[0] = AddQuotes(profile.Path);
             arg[1] = AddQuotes(FileMan.GetJavaInstallationPath() + "\\bin\\javaw.exe");
-            arg[2] = AddQuotes("-Xmx2048M -Xms2048M -jar");
+            arg[2] = AddQuotes("-jar");
             arg[3] = AddQuotes(curDirectory + "\\minecraft.exe");
             string batString = AddQuotes(curDirectory + "\\mineBat.bat");
             string arguments = arg[0] + " " + arg[1] + " " + arg[2] + " " + arg[3];
